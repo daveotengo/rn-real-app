@@ -5,4 +5,5 @@ npm install
 
 npm start
 
-![image](https://user-images.githubusercontent.com/30934250/211229130-0d2260e9-8214-4c78-90d9-7c6fd9d9c528.png)
+![image](https://user-images.githubusercontent.com/30934250/211229417-bab02782-4e5c-4e06-88bb-0521b4fb3159.png)
+
