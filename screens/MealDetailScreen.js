@@ -1,9 +1,10 @@
-import React from 'react';
+import React,{useEffect,useCallback} from 'react';
 import { View, Text, StyleSheet, Button, Platform, ScrollView ,Image} from 'react-native';
-import { MEALS } from '../data/dummy-data';
+//import { MEALS } from '../data/dummy-data';
 import Colors from '../constants/Colors';
 import { Ionicons } from '@expo/vector-icons';
 import DefaultText from '../components/DefaultText';
+import {useSelector,useDispatch} from 'react-redux';
 
 import IoniconsHeaderButton from '../components/HeaderButton';
 //import {HeaderButton,Item} from 'react-navigation-header-buttons';
@@ -14,7 +15,8 @@ import {
     HiddenItem,
     OverflowMenu,
 } from 'react-navigation-header-buttons';
-//import { Text } from 'react-native-elements'
+//import { Text } from 'react-native-elements';
+import {toggleFavorite} from '../store/actions/meals'
 
 const ListItem = props =>{
     return (
@@ -30,7 +32,31 @@ const MealDetailScreen = props => {
     //const mealId = props.navigation.getParam('mealId');
     const mealId = props.route.params.mealId;
 
-    const selectedMeal = MEALS.find(meal => meal.id === mealId);
+
+    const availableMeals = useSelector(state=>state.meals.meals);
+    
+    const selectedMeal = availableMeals.find(meal => meal.id === mealId);
+
+    const currentMealIsFavorite = useSelector(state=>state.meals.favoriteMeals.some( meal => meal.id === mealId ))
+
+    const dispatch = useDispatch();
+
+    const toggleFavoriteHandler = useCallback(()=> {
+        dispatch(toggleFavorite(mealId));
+    },[dispatch,mealId])
+
+    useEffect(() => {
+        props.navigation.setParams({toggleFav: toggleFavoriteHandler})
+       
+    }, [toggleFavoriteHandler]);
+
+    useEffect(() => {
+       props.navigation.setParams({isFav: currentMealIsFavorite})
+    }, [currentMealIsFavorite])
+
+
+useEffect(() => {
+
 
     props.navigation.setOptions({
         title: selectedMeal.title,
@@ -41,7 +67,20 @@ const MealDetailScreen = props => {
         headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
 
         headerRight: () => (<HeaderButtons HeaderButtonComponent={IoniconsHeaderButton} >
-            <Item title="search" iconName="ios-star" onPress={() => alert('search')} />
+            <Item title="search" iconName='ios-star'
+            //{props.route.params.isFav===true? 'ios-star': 'ios-star-outline' } 
+             onPress={
+                //
+                
+                props.route.params.toggleFav
+            }
+                //toggleFavorite
+                // ()=>{
+                   
+                //     console.log(props.route.params.isFav)}
+                // }
+                
+                 />
 
             {/* <ReusableItem onPress={() => alert('Edit')} /> */}
         </HeaderButtons>)
@@ -49,6 +88,8 @@ const MealDetailScreen = props => {
 
 
     });
+}, [selectedMeal])
+   
     console.log("printing   console.log(selectedMeal.ingredients);")
     console.log(selectedMeal.ingredients);
     return (
@@ -90,41 +131,41 @@ const ReusableItem = ({ onPress }) => <Item title="Favorite" onPress={onPress} /
 //     console.log("Mark as Favorite")
 // }} >
 
-MealDetailScreen.navigationOptions = navigationData => {
-    console.log("printing navigationData");
-    console.log(navigationData);
-    const mealId = navigationData.navigation.getParam('mealId');
-    const selectedMeal = MEALS.find(meal => meal.id === mealId);
-    return {
-        headerTitle: selectedMeal.title,
-        headerStyle: {
-            backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : ''
-        },
+// MealDetailScreen.navigationOptions = navigationData => {
+//     console.log("printing navigationData");
+//     console.log(navigationData);
+//     const mealId = navigationData.navigation.getParam('mealId');
+//     const selectedMeal = MEALS.find(meal => meal.id === mealId);
+//     return {
+//         headerTitle: selectedMeal.title,
+//         headerStyle: {
+//             backgroundColor: Platform.OS === 'android' ? Colors.primaryColor : ''
+//         },
 
-        headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
-        headerRight: () => (<HeaderButtons HeaderButtonComponent={IoniconsHeaderButton} >
-            <Item title="search" iconName="ios-star" onPress={() => alert('search')} />
+//         headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primaryColor,
+//         headerRight: () => (<HeaderButtons HeaderButtonComponent={IoniconsHeaderButton} >
+//             <Item title="search" iconName="ios-star" onPress={() => alert('search')} />
 
-            {/* <ReusableItem onPress={() => alert('Edit')} /> */}
-        </HeaderButtons>)
+//             {/* <ReusableItem onPress={() => alert('Edit')} /> */}
+//         </HeaderButtons>)
 
-        // headerRight: () => (
-        //     <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
-        //       <Item title="search" iconName="ios-search" onPress={() => alert('search')} />
-        //       <ReusableItem onPress={() => alert('Edit')} />
-        //       <OverflowMenu
-        //         style={{ marginHorizontal: 10 }}
-        //         OverflowIcon={({ color }) => <Ionicons name="ios-more" size={23} color={color} />}
-        //       >
-        //         <HiddenItem title="hidden1" onPress={() => alert('hidden1')} />
-        //         <ReusableHiddenItem onPress={() => alert('hidden2')} />
-        //       </OverflowMenu>
-        //     </HeaderButtons>
-        //   ),
+//         // headerRight: () => (
+//         //     <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+//         //       <Item title="search" iconName="ios-search" onPress={() => alert('search')} />
+//         //       <ReusableItem onPress={() => alert('Edit')} />
+//         //       <OverflowMenu
+//         //         style={{ marginHorizontal: 10 }}
+//         //         OverflowIcon={({ color }) => <Ionicons name="ios-more" size={23} color={color} />}
+//         //       >
+//         //         <HiddenItem title="hidden1" onPress={() => alert('hidden1')} />
+//         //         <ReusableHiddenItem onPress={() => alert('hidden2')} />
+//         //       </OverflowMenu>
+//         //     </HeaderButtons>
+//         //   ),
 
-    }
+//     }
 
-}
+// }
 
 const styles = StyleSheet.create({
     
@@ -145,7 +186,8 @@ const styles = StyleSheet.create({
 
     title:{
         fontStyle: 'bold',
-        fontSize: 22
+        fontSize: 22,
+        alignItems: 'center'
     },
 
     listItem:{

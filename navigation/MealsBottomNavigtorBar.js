@@ -14,9 +14,9 @@ const Tab = createBottomTabNavigator();
 
 const MyTabs=()=> {
   return (
-    //   <NavigationContainer>
+    // <NavigationContainer>
     <Tab.Navigator>
-    
+
  <Tab.Screen name="Meals" component={MyStack}  options={{
           tabBarLabel: 'Meals-',
           tabBarIcon: ({ color, size }) => (
@@ -54,6 +54,7 @@ const MyTabs=()=> {
         
 
     </Tab.Navigator>
+    
    
   );
 }

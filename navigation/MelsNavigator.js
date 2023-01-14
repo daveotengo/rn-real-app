@@ -28,7 +28,7 @@ function getHeaderTitle(route) {
 
 function MyStack() {
   return (
-    //   <NavigationContainer>
+    // <NavigationContainer>
     <Stack.Navigator>
     
     {/* <Stack.Screen name="MyTopTab" component={MyTopTab} /> */}
@@ -47,13 +47,22 @@ function MyStack() {
   /> 
       <Stack.Screen name="CategoryMeals" component={CategoryMealScreen}
       
+      navigationOptions= {{
+        headerTitle:'CategoryMeals**',
 
+      }}
+
+      
+       
+      // working options={{
+      //     headerTransparent: true,
+      //   }}
   />
       <Stack.Screen name="MealDetail" component={MealDetailScreen} />
       {/* <Stack.Screen name="Settings" component={Settings} /> */}
     </Stack.Navigator>
 
-   
+ 
   );
 }
 

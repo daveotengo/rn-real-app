@@ -6,7 +6,7 @@ import CategoriesScreen  from '../screens/CategoriesScreen';
 import FiltersScreen  from '../screens/FiltersScreen';
 
 
-//import MyStack from './MelsNavigator'
+import MyStack from './MelsNavigator'
 import { NavigationContainer } from '@react-navigation/native';
 
 const Drawer = createDrawerNavigator();
@@ -18,9 +18,9 @@ function MyDrawer() {
 
 
 {/* <Drawer.Screen name="MyStack" component={MyStack} /> */}
+<Drawer.Screen name="Filters" component={FiltersScreen} />
 
-      <Drawer.Screen name="MealFav" component={MealsBottomNavigatorBar} />
-      <Drawer.Screen name="Filters" component={FiltersScreen} />
+      <Drawer.Screen name="MealFav" component={MealsBottomNavigatorBar} /> 
     </Drawer.Navigator>
    </NavigationContainer>
   );

@@ -12,12 +12,25 @@ import MyTopTab from './navigation/MealsTopTab';
 import MyDrawer from './navigation/MealsDrawer';
 import 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import {createStore,combineReducers} from 'redux';
+import {Provider} from 'react-redux';
+
+import mealsReducer from './store/reducers/meals';
+
+
+
 //import * as SplashScreen from 'expo-splash-screen';
 //import Entypo from '@expo/vector-icons/Entypo';
 
 // Keep the splash screen visible while we fetch resources
 //SplashScreen.preventAutoHideAsync();
 enableScreens(); 
+
+const rootReducer = combineReducers({
+  meals: mealsReducer
+})
+
+const store = createStore(rootReducer );
 
 const fetchFonts = props =>{
   return Font.loadAsync({
@@ -80,8 +93,11 @@ export default function App() {
   // <View style={styles.container} onLayoutRootView={onLayoutRootView}>
   // {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
     //  <MyTab />
-    <MyDrawer/>
-    // <MyTab />
+   // <MyDrawer/>
+    <Provider store={store}>
+        <MyDrawer />
+    </Provider>
+    // <MyStack />
      )
 //</View>)
   
